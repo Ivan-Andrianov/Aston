@@ -8,12 +8,25 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     private static final int DEFAULT_CAPACITY = 20; //Первоначальная вместимость this.array
     private int size;  //Размер списка
 
-
+    /*
+        Конструктор класса без параметров для создания списка
+        с параметрами по умолчанию. Вместимость массива будет
+        равна дефолтному значению, указанному в переменной
+        DEFAULT_CAPACITY. Изначальное количество элементов
+        списка равно 0.
+     */
     public MyArrayList(){
         array = new Object[DEFAULT_CAPACITY];
         size = 0;
     }
 
+    /*
+        Конструктор класса с параметром для настройки вместимости.
+        @Throws
+            IllegalArgumentException - при значении capacity меньше 0.
+        @Params
+            capacity - размер array.
+     */
     public MyArrayList(int capacity){
         if (capacity>0) {
             array = new Object[capacity];
@@ -24,6 +37,12 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
         }
     }
 
+    /*
+        Конструктор класса создающий объект списка на основе
+        элементов предоставленных параметром collection.
+        @Params
+            collection - список элементов вставляемых в новый список.
+     */
     public MyArrayList(List<T> collection){
         array = new Object[collection.size()];
         size = 0;
