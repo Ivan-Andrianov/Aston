@@ -7,6 +7,7 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     private Object[] array;  //Массив, хранящий элементы списка
     private static final int DEFAULT_CAPACITY = 20; //Первоначальная вместимость this.array
     private int size;  //Размер списка
+    private volatile int modificationCount; //Количество структурных изменений списка
 
     /**
      * Конструктор класса без параметров для создания списка
@@ -65,14 +66,15 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     }
 
     @Override
-    public void remove(T element) {
+    public boolean remove(Object element) {
         for (int i=0;i<size;i++){
             if (element.equals(array[i])){
                 System.arraycopy(array,i+1,array,i,size-i);
                 array[size--] = null;
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     @Override
@@ -125,22 +127,59 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
         }
     }
 
+
+    /**
+     * Fail-fast итератор
+     * @param <T> тип элемента итерируемого списка
+     */
+    private class MyArrayItr<T> implements Iterator<T>{
+        int position;
+        int expectedModificationCount;
+        int lastRet;
+
+        MyArrayItr(){
+            position = 0;
+            expectedModificationCount = modificationCount;
+            lastRet = -1;
+        }
+        @Override
+        public boolean hasNext() {
+            return position!=size;
+        }
+
+        @Override
+        public T next() {
+            checkForModificationCount();
+            if (position>=size) throw new NoSuchElementException();
+            Object[] elements = array;
+            if (expectedModificationCount!=elements.length) throw new ConcurrentModificationException();
+            lastRet = position;
+            return (T) elements[position++];
+        }
+
+        @Override
+        public void remove() {
+            if (lastRet<0) throw new IllegalStateException();
+            checkForModificationCount();
+
+            try {
+                MyArrayList.this.remove(array[lastRet]);
+                position = lastRet;
+                lastRet = -1;
+                expectedModificationCount = modificationCount;
+            }catch (IndexOutOfBoundsException e){
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        public void checkForModificationCount(){
+            if (modificationCount!=expectedModificationCount) throw new ConcurrentModificationException();
+        }
+    }
+
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return array[index]!=null;
-            }
-
-            @Override
-            public T next() {
-                return (T) array[index++];
-            }
-        };
+        return new MyArrayItr<>();
     }
 
     @Override

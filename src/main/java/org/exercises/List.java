@@ -20,9 +20,11 @@ public interface List<T> extends Iterable<T>{
 
     /**
      * Удаление первого вхождения элемента.
+     *
      * @param element удаляемый элемент
+     * @return
      */
-    void remove(T element);
+    boolean remove(Object element);
 
     /**
      * Получение элемента по индексу.
