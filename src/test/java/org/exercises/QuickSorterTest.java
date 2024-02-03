@@ -1,7 +1,9 @@
+
 package org.exercises;
 
 import static org.assertj.core.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class QuickSorterTest {
@@ -9,7 +11,7 @@ class QuickSorterTest {
     public List<Integer> list;
     public List<Integer> emptyList;
 
-    @BeforeEach()
+    @BeforeAll
     void setUp() {
         list = new MyArrayList<>();
         list.add(10);
@@ -35,7 +37,7 @@ class QuickSorterTest {
     }
 
     @Test
-    void sortEmptyList(){
+    void sortEmptyList() {
         emptyList.sort();
         assertThat(emptyList.size()).isEqualTo(0);
     }
