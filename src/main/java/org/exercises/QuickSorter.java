@@ -1,12 +1,9 @@
 package org.exercises;
 
-import java.util.Arrays;
 
-
-/*
-    Реализация интерфейса Sorter. Представляет алгоритм быстрой сортировки.
-    @TypeParams
-        T - тип элемента сортируемого списка.
+/**
+ * Реализация интерфейса Sorter. Представляет алгоритм быстрой сортировки.
+ * @param <T> тип сортируемого элемента
  */
 public class QuickSorter<T extends Comparable<T>> implements Sorter<T>{
 
@@ -21,12 +18,12 @@ public class QuickSorter<T extends Comparable<T>> implements Sorter<T>{
         }
     }
 
-    /*
-        Поиск опорного элемента списка.
-        @Params
-            list - сортируемый список;
-            left - индекс начала области сортировки списка;
-            right - индекс конца области сортировки списка;
+    /**
+     * Поиск опорного элемента списка.
+     * @param list сортируемый список
+     * @param left индекс начала области сортировки списка
+     * @param right индекс конца области сортировки списка
+     * @return индекс опорного элемента
      */
     private int partition(List<T> list, int left, int right) {
         T pivot = list.get(right);

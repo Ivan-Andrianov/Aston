@@ -8,24 +8,21 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     private static final int DEFAULT_CAPACITY = 20; //Первоначальная вместимость this.array
     private int size;  //Размер списка
 
-    /*
-        Конструктор класса без параметров для создания списка
-        с параметрами по умолчанию. Вместимость массива будет
-        равна дефолтному значению, указанному в переменной
-        DEFAULT_CAPACITY. Изначальное количество элементов
-        списка равно 0.
+    /**
+     * Конструктор класса без параметров для создания списка
+     * с параметрами по умолчанию. Вместимость массива будет
+     * равна дефолтному значению, указанному в переменной
+     * DEFAULT_CAPACITY. Изначальное количество элементов
+     * списка равно 0.
      */
     public MyArrayList(){
         array = new Object[DEFAULT_CAPACITY];
         size = 0;
     }
 
-    /*
-        Конструктор класса с параметром для настройки вместимости.
-        @Throws
-            IllegalArgumentException - при значении capacity меньше 0.
-        @Params
-            capacity - размер array.
+    /**
+     * Конструктор класса с параметром для настройки вместимости.
+     * @param capacity размер массива элементов списка
      */
     public MyArrayList(int capacity){
         if (capacity>0) {
@@ -37,11 +34,10 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
         }
     }
 
-    /*
-        Конструктор класса создающий объект списка на основе
-        элементов предоставленных параметром collection.
-        @Params
-            collection - список элементов вставляемых в новый список.
+    /**
+     * Конструктор класса создающий объект списка на основе
+     * элементов предоставленных параметром collection.
+     * @param collection список элементов вставляемых в новый список
      */
     public MyArrayList(List<T> collection){
         array = new Object[collection.size()];
@@ -108,11 +104,10 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     public boolean contains(T element) {
         boolean isContained = false;
 
-        for (int i=0;i<size;i++){
-            if (element.equals(array[i])){
-                isContained = true;
-            }
+        for (T listElement: this){
+            if (listElement.equals(element)) isContained = true;
         }
+
         return isContained;
     }
 
