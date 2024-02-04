@@ -37,11 +37,9 @@ public class QuickSorter<T extends Comparable<T>> implements Sorter<T>{
             }
         }
 
-
         T temp = list.get(i+1);
         list.set(list.get(right),i+1);
         list.set(temp,right);
-
 
         return i + 1;
     }

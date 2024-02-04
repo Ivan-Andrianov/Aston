@@ -4,8 +4,9 @@ package org.exercises;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+// все хорошо, есть только замечания по стилю
 class MyArrayListTest {
 
     public List<Integer> list;
@@ -19,8 +20,8 @@ class MyArrayListTest {
     }
 
     @org.junit.jupiter.api.Test
-    void add() {
-        assertThat(list.size()).isEqualTo(3);
+    void add() { // неинфорамативный нейминг методов, почитай конвенции наименования тестов
+        assertThat(list.size()).isEqualTo(3); // все перемешано, чекни given when then
         list.add(4);
         assertThat(list.size()).isEqualTo(4);
         list.add(5);
@@ -71,20 +72,16 @@ class MyArrayListTest {
 
     @Test
     void getByWrongIndex(){
-        try {
-            list.get(-1);
-            fail("Список не может выдавать значение по отрицательному индексу");
-        }catch (IndexOutOfBoundsException e){}
-
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1)); // вот так надо, без fail
         try{
             list.get(20);
-            fail("Список не может выдавать значение по индексу, который больше размера списка");
+            fail("Список не может выдавать значение по индексу, который больше размера списка"); // а зачем тут это?
         }catch (IndexOutOfBoundsException e){}
     }
 
     @org.junit.jupiter.api.Test
     void clear() {
         list.clear();
-        assertThat(list.size()).isEqualTo(0);
+        assertThat(list.size()).isZero();
     }
 }

@@ -1,9 +1,11 @@
 package org.exercises;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MyArrayList<T extends Comparable<T>> implements List<T>{
 
+    public static final String INCORRECT_CAPACITY_ERR_MSG = "Вместимость не может быть меньше нуля";
     private Object[] array;  //Массив, хранящий элементы списка
     private static final int DEFAULT_CAPACITY = 20; //Первоначальная вместимость this.array
     private int size;  //Размер списка
@@ -18,7 +20,7 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
      */
     public MyArrayList(){
         array = new Object[DEFAULT_CAPACITY];
-        size = 0;
+        size = 0; // и так будет 0 по дефолту
     }
 
     /**
@@ -28,11 +30,11 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     public MyArrayList(int capacity){
         if (capacity>0) {
             array = new Object[capacity];
-        }else if (capacity == 0){
+        } else if (capacity == 0){
             array = new Object[DEFAULT_CAPACITY];
-        }else{
-            throw new IllegalArgumentException("Вместимость не может быть меньше нуля");
         }
+
+        throw new IllegalArgumentException(INCORRECT_CAPACITY_ERR_MSG);
     }
 
     /**
@@ -43,7 +45,7 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     public MyArrayList(List<T> collection){
         array = new Object[collection.size()];
         size = 0;
-        for (Object element:collection){
+        for (Object element : collection){
             array[size++] = element;
         }
     }
@@ -58,7 +60,7 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
     @Override
     public void insert(T element, int index) {
         ensureCapacity();
-        if (index<0) index=0;
+        if (index<0) index=0; // не забывай про {} - это улучшает читаемость
         if (index>=size) index = size;
         System.arraycopy(array,index+1,array,index,size-index);
         array[index] = element;
@@ -67,8 +69,8 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
 
     @Override
     public boolean remove(Object element) {
-        for (int i=0;i<size;i++){
-            if (element.equals(array[i])){
+        for (int i=0; i < size; i++) {
+            if (element.equals(array[i])){ // NPE если element == null
                 System.arraycopy(array,i+1,array,i,size-i);
                 array[size--] = null;
                 return true;
@@ -99,18 +101,17 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
 
     @Override
     public boolean isEmpty() {
-        return size==0?true:false;
+        return size == 0;// тут тернарник лишний
     }
 
     @Override
     public boolean contains(T element) {
-        boolean isContained = false;
-
         for (T listElement: this){
-            if (listElement.equals(element)) isContained = true;
+            if (listElement.equals(element)) {
+                return true;
+            }
         }
-
-        return isContained;
+        return false;
     }
 
     @Override
@@ -195,14 +196,9 @@ public class MyArrayList<T extends Comparable<T>> implements List<T>{
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("[");
-        for (Object value:array){
-            buffer.append(value+", ");
-        }
-        buffer.append("]");
-
-        return buffer.toString();
+        return Arrays.stream(array)
+                .map(Object::toString)
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 }
 
